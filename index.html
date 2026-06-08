@@ -1,0 +1,170 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <meta name="robots" content="noindex, nofollow" />
+  <meta name="referrer" content="no-referrer" />
+  <meta name="theme-color" content="#0a0d14" />
+  <title>Download Relay</title>
+  <link rel="icon" type="image/png" href="favicon.png" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Istok+Web:wght@400;700&display=swap" />
+  <style>
+    :root{
+      --bg:#0a0d14; --bg-2:#0f1218; --panel:#161a23; --panel-2:#1d2230;
+      --border:#262c3a; --border-2:#323a4d; --text:#eef1f7; --muted:#8b93a5;
+      --muted-2:#6b7385; --accent:#6ba6ff; --accent-2:#4787e8; --good:#4cd394;
+      --warn:#ffc46b;
+      font-family:"Istok Web",-apple-system,BlinkMacSystemFont,"Segoe UI",system-ui,sans-serif;
+    }
+    *{box-sizing:border-box}
+    html,body{margin:0;padding:0;background:var(--bg);color:var(--text);min-height:100%;
+      -webkit-font-smoothing:antialiased;-moz-osx-font-smoothing:grayscale;}
+    body{display:flex;flex-direction:column;align-items:center;padding:54px 20px 64px;}
+    .wrap{width:100%;max-width:560px;}
+    .brand{display:flex;align-items:center;gap:14px;justify-content:center;margin-bottom:10px;}
+    .brand img{width:46px;height:46px;display:block;}
+    .brand-name{font-size:34px;font-weight:700;color:#fff;letter-spacing:-0.025em;}
+    .sub{text-align:center;color:var(--muted);font-size:15px;line-height:1.5;margin:0 0 6px;}
+    .ver{text-align:center;color:var(--muted-2);font-size:13px;margin:0 0 30px;}
+    .ver b{color:var(--good);font-weight:700;}
+    .dl-list{display:flex;flex-direction:column;gap:12px;}
+    .dl{
+      display:flex;align-items:center;gap:14px;
+      background:var(--panel);border:1px solid var(--border);border-radius:8px;
+      padding:16px 18px;text-decoration:none;color:var(--text);
+      transition:border-color 120ms ease, transform 120ms ease, background 120ms ease;
+    }
+    .dl:hover{border-color:var(--accent);transform:translateY(-1px);}
+    .dl.rec{border-color:var(--accent);background:linear-gradient(135deg,rgba(107,166,255,0.10),transparent);}
+    .os-main{flex:1;min-width:0;}
+    .os-name{font-weight:700;font-size:16px;display:flex;align-items:center;gap:9px;letter-spacing:-0.01em;}
+    .os-sub{color:var(--muted);font-size:12.5px;margin-top:3px;}
+    .rec-tag{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;
+      color:#08121f;background:var(--accent);padding:2px 8px;border-radius:999px;}
+    .arrow{color:var(--muted);font-size:20px;flex:0 0 auto;}
+    .dl:hover .arrow{color:var(--accent);}
+    [hidden]{display:none !important;}
+    .note{margin:24px 2px 0;color:var(--muted-2);font-size:12.5px;line-height:1.6;}
+    .note strong{color:var(--muted);}
+    .note code{background:var(--panel);border:1px solid var(--border);border-radius:3px;padding:1px 5px;font-size:11.5px;color:var(--text);}
+    .foot{margin-top:28px;text-align:center;font-size:12.5px;}
+    .foot a{color:var(--muted);text-decoration:none;}
+    .foot a:hover{color:var(--accent);}
+    .state{text-align:center;font-size:14px;padding:22px;border-radius:8px;}
+    .loading{color:var(--muted);}
+    .err{display:none;color:var(--warn);background:rgba(255,196,107,0.07);
+      border:1px solid rgba(255,196,107,0.3);}
+    .err a{color:var(--accent);}
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="brand">
+      <img src="favicon.png" alt="" />
+      <span class="brand-name">Relay</span>
+    </div>
+    <p class="sub">Pass-the-baton Minecraft hosting for friends.</p>
+    <p class="ver" id="ver">Checking for the latest version…</p>
+
+    <div class="state loading" id="loading">Fetching the latest release…</div>
+    <div class="state err" id="err">
+      Couldn't reach GitHub. <a href="https://github.com/willcoding11/relay-releases/releases/latest">Open the releases page&nbsp;→</a>
+    </div>
+
+    <div class="dl-list" id="dl-list" hidden>
+      <a class="dl" id="dl-win" hidden>
+        <div class="os-main">
+          <div class="os-name">Windows <span class="rec-tag" hidden>Recommended</span></div>
+          <div class="os-sub">Installer&nbsp;·&nbsp;64-bit</div>
+        </div>
+        <span class="arrow">↓</span>
+      </a>
+      <a class="dl" id="dl-mac" hidden>
+        <div class="os-main">
+          <div class="os-name">macOS <span class="rec-tag" hidden>Recommended</span></div>
+          <div class="os-sub">Apple Silicon&nbsp;·&nbsp;.dmg</div>
+        </div>
+        <span class="arrow">↓</span>
+      </a>
+      <a class="dl" id="dl-linux" hidden>
+        <div class="os-main">
+          <div class="os-name">Linux <span class="rec-tag" hidden>Recommended</span></div>
+          <div class="os-sub">AppImage&nbsp;·&nbsp;x86_64</div>
+        </div>
+        <span class="arrow">↓</span>
+      </a>
+    </div>
+
+    <p class="note" id="note" hidden>
+      Relay isn't code-signed yet, so your OS may warn you the first time you open it:
+      <br>•&nbsp;<strong>Windows:</strong> click “More info” → “Run anyway”.
+      <br>•&nbsp;<strong>macOS:</strong> right-click the app → “Open” → “Open” (Apple Silicon Macs only).
+      <br>•&nbsp;<strong>Linux:</strong> <code>chmod +x</code> the AppImage, then run it.
+    </p>
+
+    <p class="foot"><a href="https://github.com/willcoding11/relay-releases/releases" id="all">All versions &amp; release notes&nbsp;→</a></p>
+  </div>
+
+  <script>
+    // Pulls the newest release straight from the public GitHub API, so this
+    // page always serves the latest installers with no edits per release.
+    const REPO = 'willcoding11/relay-releases';
+    const $ = (id) => document.getElementById(id);
+
+    function osGuess() {
+      const p = ((navigator.userAgentData && navigator.userAgentData.platform) ||
+                 navigator.platform || navigator.userAgent || '').toLowerCase();
+      if (p.includes('win')) return 'win';
+      if (p.includes('mac') || p.includes('iphone') || p.includes('ipad')) return 'mac';
+      if (p.includes('linux') || p.includes('x11') || p.includes('android')) return 'linux';
+      return '';
+    }
+    const mb = (bytes) => Math.round(bytes / 1048576) + ' MB';
+
+    fetch('https://api.github.com/repos/' + REPO + '/releases/latest', {
+      headers: { 'Accept': 'application/vnd.github+json' }
+    })
+      .then((r) => { if (!r.ok) throw new Error('http ' + r.status); return r.json(); })
+      .then((rel) => {
+        const assets = rel.assets || [];
+        const find = (re) => assets.find((a) => re.test(a.name)) || null;
+        const setBtn = (id, asset, label) => {
+          if (!asset) return false;
+          const el = $(id);
+          el.href = asset.browser_download_url;
+          el.querySelector('.os-sub').innerHTML = label + '&nbsp;·&nbsp;' + mb(asset.size);
+          el.hidden = false;
+          return true;
+        };
+
+        $('ver').innerHTML = 'Latest version: <b>' + (rel.tag_name || '') + '</b>';
+        const have = {
+          win: setBtn('dl-win', find(/\.exe$/i), 'Installer · 64-bit'),
+          mac: setBtn('dl-mac', find(/\.dmg$/i), 'Apple Silicon · .dmg'),
+          linux: setBtn('dl-linux', find(/\.AppImage$/i), 'AppImage · x86_64')
+        };
+
+        const guess = osGuess();
+        const recId = { win: 'dl-win', mac: 'dl-mac', linux: 'dl-linux' }[guess];
+        if (recId && have[guess]) {
+          const el = $(recId);
+          el.classList.add('rec');
+          const tag = el.querySelector('.rec-tag'); if (tag) tag.hidden = false;
+          $('dl-list').prepend(el); // float the user's platform to the top
+        }
+
+        $('loading').style.display = 'none';
+        $('dl-list').hidden = false;
+        $('note').hidden = false;
+      })
+      .catch(() => {
+        $('loading').style.display = 'none';
+        $('ver').style.display = 'none';
+        $('err').style.display = 'block';
+      });
+  </script>
+</body>
+</html>
